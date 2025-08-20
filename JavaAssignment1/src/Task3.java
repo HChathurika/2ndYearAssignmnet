@@ -16,7 +16,12 @@ public class Task3 {
 
         System.out.println("The sum of the numbers is  = " + (first + second + third));
         System.out.println("The product of these three numbers  is = " + (first * second * third));
-        System.out.println("The average of these three  numbers is  = " + ((first + second +third)/3));
+        System.out.println("The average of these three  numbers is  = " + ((double)(first + second +third)/3));
+
+        /* The average is not an integer .It is a decimal number .If it is should be shown as it is the answer should
+        be a floating number.Therefore adding double or 3.0
+         */
+
     }
 }
 
