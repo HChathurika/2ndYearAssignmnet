@@ -21,8 +21,8 @@ public class QuadraticEquation {
 
         if (Math.pow(b,2)>= 4*a*c) {
             System.out.println("The equation have roots .\n");
-            System.out.println("The roots are x1= " + x1 + "\n");
-            System.out.println("The roots are x2= " + x2 + "\n");
+            System.out.println("The roots are x1 = " + x1 + "\n");
+            System.out.println("The roots are x2 = " + x2 + "\n");
         }
 
             else {
