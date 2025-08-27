@@ -1,7 +1,11 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GroceryListManager {
     private ArrayList<String> groceryList = new ArrayList<>();
+    private HashMap<String, ArrayList<String>> groceryHashMap = new HashMap<>();
+
+
 
 
     public void addItem(String item) {
