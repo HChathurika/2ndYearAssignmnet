@@ -5,11 +5,11 @@ public class CoffeeUser {
         myCoffee.turnOn();
         System.out.println("Coffee Machine is on");
 
-        myCoffee.setCoffeeType("Capatuno");
+        myCoffee.setCoffeeType("Caputuno");
         myCoffee.setCoffeeAmount(50);
 
-        System.out.println("Coffee type is : " +myCoffee.getCoffeeType()) ;
-        System.out.println("Coffee amount is :" + myCoffee.getCoffeeAmount() + "ml");
+        System.out.println("Coffee type is : " + myCoffee.getCoffeeType()) ;
+        System.out.println("Coffee amount is :" + myCoffee.getCoffeeAmount() + " ml");
 
         myCoffee.turnOff();
         System.out.println("Coffee maker is off");

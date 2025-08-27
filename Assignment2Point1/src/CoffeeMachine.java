@@ -24,7 +24,7 @@ public class CoffeeMachine {
     }
 
     public void setCoffeeType(String type) {
-        if (on && (type.equals("normal") || type.equals("espresso"))) {
+        if (on && (type.equals("Caputuno") || type.equals("espresso"))) {
             CoffeeType = type;
         }
     }
