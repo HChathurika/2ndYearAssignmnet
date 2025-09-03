@@ -1,15 +1,15 @@
 public class Shape {
-    protected String color; // common property for all shapes
+    protected String color;
 
     public Shape() {
-        this.color = "undefined"; // default color
+        this.color = "undefined";
     }
 
     public Shape(String color) {
         this.color = color;
     }
 
-    // Method to calculate area (base implementation returns 0)
+
     public double calculateArea() {
         return 0;
     }
