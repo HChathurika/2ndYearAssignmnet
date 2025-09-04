@@ -19,7 +19,7 @@ public class Library {
                     + "\", Year: " + book.getPublicationYear()
                     + ", Rating: " + book.getRating() + status);
 
-            // show reviews if any
+
             if (!book.getReviews().isEmpty()) {
                 System.out.println("   Reviews:");
                 for (String review : book.getReviews()) {
