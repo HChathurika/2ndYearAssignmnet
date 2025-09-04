@@ -1,6 +1,4 @@
 package Task3;
-
-
 public abstract class AbstractVehicle implements Vehicle, ElectricVehicle {
     protected String type;
     protected String fuel;
