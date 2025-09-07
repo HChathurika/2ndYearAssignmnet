@@ -3,7 +3,7 @@ import java.io.IOException;
 
 public class Task2Fibonacci {
     public static void main(String[] args) {
-        String filename = "fibonacci.csv"; // output file
+        String filename = "fibonacci.csv";
 
         try (FileWriter writer = new FileWriter(filename)) {
             long a = 0, b = 1;
@@ -13,7 +13,7 @@ public class Task2Fibonacci {
 
 
             for (int i = 1; i <= 60; i++) {
-                writer.write(i + ";" + a + "\n"); // save as index;number
+                writer.write(i + ";" + a + "\n");
                 long next = a + b;
                 a = b;
                 b = next;
