@@ -1,5 +1,7 @@
 package Task2;
 
+import Book;
+
 public class LibraryMain {
     public static void main(String[] args) {
 

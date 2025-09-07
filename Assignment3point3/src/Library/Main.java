@@ -1,3 +1,7 @@
+package Library;
+
+import Library.model.LibraryMember;
+
 public class Main {
     public static void main(String[] args) {
         Library library = new Library();

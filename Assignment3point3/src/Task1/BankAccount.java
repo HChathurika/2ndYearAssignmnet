@@ -1,3 +1,5 @@
+package Task1;
+
 public class BankAccount {
     private static int totalAccounts = 0;  // static variable shared by all accounts
     private int accountNumber;
