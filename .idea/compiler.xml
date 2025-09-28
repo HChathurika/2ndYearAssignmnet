@@ -8,10 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Assignment_6_1" />
         <module name="Assignmnet_6_3" />
+        <module name="Assignmnet_6_4" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Assignment5point2" target="21" />
+      <module name="Assignment_6_2" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
