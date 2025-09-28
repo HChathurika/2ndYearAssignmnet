@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/19"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controller.NoteController"
+      spacing="10" alignment="CENTER" padding="20">
+
+    <!-- Input fields -->
+    <TextField fx:id="titleField" promptText="Enter note title"/>
+    <TextArea fx:id="contentArea" promptText="Enter note content" prefRowCount="5"/>
+    <Button fx:id="addButton" text="Add" onAction="#handleAddNote"/>
+
+    <!-- Notes display -->
+    <Label text="Saved Notes:" style="-fx-font-weight: bold;"/>
+    <VBox fx:id="notesContainer" spacing="5"/>
+
+</VBox>
