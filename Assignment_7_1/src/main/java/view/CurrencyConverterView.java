@@ -1,73 +1,42 @@
 package view;
 
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import model.Currency;
 import controller.CurrencyController;
+import model.Currency;
+
 import java.util.List;
+import java.util.Scanner;
 
-public class CurrencyView {
+public class CurrencyConverterView {
+
     private CurrencyController controller;
+    private Scanner scanner;
 
-    public CurrencyView(CurrencyController controller) {
+    public CurrencyConverterView(CurrencyController controller) {
         this.controller = controller;
+        this.scanner = new Scanner(System.in);
     }
 
-    public void start(Stage stage) {
-        stage.setTitle("Currency Converter");
-
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(20));
-        grid.setVgap(10);
-        grid.setHgap(10);
-
-        Label amountLabel = new Label("Amount:");
-        TextField amountField = new TextField();
-
-        Label fromLabel = new Label("From:");
-        ComboBox<Currency> fromCombo = new ComboBox<>();
-
-        Label toLabel = new Label("To:");
-        ComboBox<Currency> toCombo = new ComboBox<>();
-
-        Label resultLabel = new Label("Result: ");
-        Button convertButton = new Button("Convert");
+    public void start() {
+        System.out.println("Welcome to the Currency Converter!");
 
         List<Currency> currencies = controller.getAllCurrencies();
-        fromCombo.getItems().addAll(currencies);
-        toCombo.getItems().addAll(currencies);
+        System.out.println("Available currencies:");
+        currencies.forEach(c -> System.out.println(c.getAbbreviation() + " - " + c.getName()));
 
-        grid.add(amountLabel, 0, 0);
-        grid.add(amountField, 1, 0);
-        grid.add(fromLabel, 0, 1);
-        grid.add(fromCombo, 1, 1);
-        grid.add(toLabel, 0, 2);
-        grid.add(toCombo, 1, 2);
-        grid.add(convertButton, 0, 3);
-        grid.add(resultLabel, 1, 3);
+        System.out.print("Enter amount: ");
+        double amount = scanner.nextDouble();
 
-        convertButton.setOnAction(e -> {
-            try {
-                double amount = Double.parseDouble(amountField.getText());
-                Currency from = fromCombo.getValue();
-                Currency to = toCombo.getValue();
-                if (from != null && to != null) {
-                    double result = controller.convert(amount, from, to);
-                    resultLabel.setText(String.format("Result: %.4f %s", result, to.getAbbreviation()));
-                } else {
-                    resultLabel.setText("Please select both currencies.");
-                }
-            } catch (NumberFormatException ex) {
-                resultLabel.setText("Invalid amount.");
-            }
-        });
+        System.out.print("From currency (abbreviation): ");
+        String from = scanner.next();
 
-        Scene scene = new Scene(grid, 400, 250);
-        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-        stage.setScene(scene);
-        stage.show();
+        System.out.print("To currency (abbreviation): ");
+        String to = scanner.next();
+
+        try {
+            double result = controller.convert(from, to, amount);
+            System.out.println(amount + " " + from + " = " + result + " " + to);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }
