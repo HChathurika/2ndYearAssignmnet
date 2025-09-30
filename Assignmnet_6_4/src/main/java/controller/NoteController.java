@@ -1,48 +1,41 @@
 package controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
 import model.Note;
 import model.Notebook;
 
 public class NoteController {
 
     @FXML
-    private TextField titleField;
+    private TextField titleInput;
 
     @FXML
-    private TextArea contentArea;
+    private TextArea contentInput;
 
     @FXML
-    private Button addButton;
+    private ListView<String> notesList;
+
+    private Notebook notebook = new Notebook();
 
     @FXML
-    private VBox notesContainer;
+    private void addNote(ActionEvent event) {
+        String title = titleInput.getText().trim();
+        String content = contentInput.getText().trim();
 
-    private final Notebook notebook = new Notebook();
+        if (!title.isEmpty() && !content.isEmpty()) {
+            Note note = new Note(title, content);
+            notebook.addNote(note);
 
-    @FXML
-    private void handleAddNote() {
-        String title = titleField.getText();
-        String content = contentArea.getText();
+            // Update ListView with note titles
+            notesList.getItems().add(title + ": " + content);
 
-        if (title.isEmpty() || content.isEmpty()) {
-            return; // ignore empty notes
+            // Clear inputs
+            titleInput.clear();
+            contentInput.clear();
         }
-
-        Note note = new Note(title, content);
-        notebook.addNote(note);
-
-        // Display note in the VBox
-        Label noteLabel = new Label(note.toString());
-        notesContainer.getChildren().add(noteLabel);
-
-        // Clear inputs
-        titleField.clear();
-        contentArea.clear();
     }
 }

@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/19"
+<VBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controller.NoteController"
-      spacing="10" alignment="CENTER" padding="20">
+      spacing="10" alignment="TOP_LEFT">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
 
-    <!-- Input fields -->
-    <TextField fx:id="titleField" promptText="Enter note title"/>
-    <TextArea fx:id="contentArea" promptText="Enter note content" prefRowCount="5"/>
-    <Button fx:id="addButton" text="Add" onAction="#handleAddNote"/>
+    <!-- Title input -->
+    <HBox spacing="10">
+        <Label text="Title:"/>
+        <TextField fx:id="titleInput" promptText="Enter note title" HBox.hgrow="ALWAYS"/>
+    </HBox>
 
-    <!-- Notes display -->
+    <!-- Content input -->
+    <VBox spacing="5">
+        <Label text="Content:"/>
+        <TextArea fx:id="contentInput" promptText="Write your note here..." prefRowCount="5"/>
+    </VBox>
+
+    <!-- Add button -->
+    <Button text="Add" onAction="#addNote" maxWidth="100"/>
+
+    <!-- Saved notes section -->
     <Label text="Saved Notes:" style="-fx-font-weight: bold;"/>
-    <VBox fx:id="notesContainer" spacing="5"/>
-
+    <ListView fx:id="notesList" prefHeight="200"/>
 </VBox>
