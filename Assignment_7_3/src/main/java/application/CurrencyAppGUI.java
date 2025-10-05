@@ -3,99 +3,155 @@ package application;
 import dao.CurrencyDao;
 import entity.Currency;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.util.List;
+import datasource.MariaDbJpaConnection;
 
 public class CurrencyAppGUI extends Application {
 
-    private CurrencyDao dao = new CurrencyDao();
-    private TextArea outputArea = new TextArea();
+
+    private TableView<Currency> table;
+    private final CurrencyDao dao = new CurrencyDao();
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Currency Converter");
+        primaryStage.setTitle("Currency Manager (JPA)");
 
-        outputArea.setEditable(false);
-        outputArea.setPrefSize(400, 300);
+        table = new TableView<>();
+        TableColumn<Currency, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idCol.setPrefWidth(60);
 
-        Button loadButton = new Button("Load Currencies");
-        loadButton.setOnAction(e -> displayCurrencies());
+        TableColumn<Currency, String> codeCol = new TableColumn<>("Code");
+        codeCol.setCellValueFactory(new PropertyValueFactory<>("code"));
+        codeCol.setPrefWidth(100);
 
-        Button addButton = new Button("Add Currency");
-        addButton.setOnAction(e -> openAddCurrencyWindow());
+        TableColumn<Currency, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nameCol.setPrefWidth(240);
 
-        HBox buttons = new HBox(10, loadButton, addButton);
+        TableColumn<Currency, Double> rateCol = new TableColumn<>("Rate");
+        rateCol.setCellValueFactory(new PropertyValueFactory<>("rate"));
+        rateCol.setPrefWidth(120);
 
-        VBox root = new VBox(10, buttons, outputArea);
+        table.getColumns().addAll(idCol, codeCol, nameCol, rateCol);
+
+        Button loadBtn = new Button("Load Currencies");
+        loadBtn.setOnAction(e -> loadCurrencies());
+
+        Button addBtn = new Button("Add Currency");
+        addBtn.setOnAction(e -> showAddCurrencyDialog(primaryStage));
+
+        HBox buttons = new HBox(10, loadBtn, addBtn);
+        buttons.setPadding(new Insets(10));
+
+        VBox root = new VBox(10, table, buttons);
         root.setPadding(new Insets(10));
 
-        Scene scene = new Scene(root, 450, 400);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
+
+        // initial load
+        loadCurrencies();
     }
 
-    private void displayCurrencies() {
-        List<Currency> currencies = dao.findAll();
-        outputArea.clear();
-        for (Currency c : currencies) {
-            outputArea.appendText(c.getCode() + " - " + c.getName() + " - " + c.getRate() + "\n");
+    private void loadCurrencies() {
+        try {
+            ObservableList<Currency> list = FXCollections.observableArrayList(dao.findAll());
+            table.setItems(list);
+        } catch (Exception ex) {
+            showError("Failed to load currencies", ex.getMessage());
         }
     }
 
-    private void openAddCurrencyWindow() {
-        Stage stage = new Stage();
-        stage.setTitle("Add New Currency");
-
-        TextField codeField = new TextField();
-        TextField nameField = new TextField();
-        TextField rateField = new TextField();
+    private void showAddCurrencyDialog(Stage owner) {
+        Stage dialog = new Stage();
+        dialog.initOwner(owner);
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setTitle("Add Currency");
 
         GridPane grid = new GridPane();
         grid.setVgap(10);
         grid.setHgap(10);
-        grid.add(new Label("Code:"), 0, 0);
-        grid.add(codeField, 1, 0);
-        grid.add(new Label("Name:"), 0, 1);
-        grid.add(nameField, 1, 1);
-        grid.add(new Label("Rate:"), 0, 2);
-        grid.add(rateField, 1, 2);
+        grid.setPadding(new Insets(10));
 
-        Button saveButton = new Button("Save");
-        saveButton.setOnAction(e -> {
+        Label codeLabel = new Label("Code:");
+        TextField codeField = new TextField();
+
+        Label nameLabel = new Label("Name:");
+        TextField nameField = new TextField();
+
+        Label rateLabel = new Label("Rate:");
+        TextField rateField = new TextField();
+
+        Button saveBtn = new Button("Save");
+        saveBtn.setOnAction(e -> {
+            String code = codeField.getText().trim();
+            String name = nameField.getText().trim();
+            String rateText = rateField.getText().trim();
+
+            if (code.isEmpty() || name.isEmpty() || rateText.isEmpty()) {
+                showError("Validation error", "All fields are required.");
+                return;
+            }
+
+            double rate;
             try {
-                String code = codeField.getText();
-                String name = nameField.getText();
-                double rate = Double.parseDouble(rateField.getText());
-                dao.persist(new Currency(code, name, rate));
-                stage.close();
-                displayCurrencies(); // Refresh main canvas
+                rate = Double.parseDouble(rateText);
+            } catch (NumberFormatException ex) {
+                showError("Validation error", "Rate must be a number.");
+                return;
+            }
+
+            Currency c = new Currency(code, name, rate);
+            try {
+                dao.persist(c);
+                dialog.close();
+                loadCurrencies(); // refresh
             } catch (Exception ex) {
-                showError("Invalid input or database error!");
+                showError("Database error", ex.getMessage());
             }
         });
 
-        VBox vbox = new VBox(10, grid, saveButton);
-        vbox.setPadding(new Insets(10));
+        Button cancelBtn = new Button("Cancel");
+        cancelBtn.setOnAction(e -> dialog.close());
 
-        stage.setScene(new Scene(vbox, 300, 200));
-        stage.showAndWait();
+        HBox hb = new HBox(10, saveBtn, cancelBtn);
+
+        grid.addRow(0, codeLabel, codeField);
+        grid.addRow(1, nameLabel, nameField);
+        grid.addRow(2, rateLabel, rateField);
+        grid.add(hb, 1, 3);
+
+        Scene scene = new Scene(grid, 380, 200);
+        dialog.setScene(scene);
+        dialog.showAndWait();
     }
 
-    private void showError(String msg) {
+    private void showError(String header, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        // cleanly close EntityManagerFactory/EntityManager
+        MariaDbJpaConnection.close();
+        super.stop();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
-}
 
+
+}
