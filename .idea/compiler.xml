@@ -6,15 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Assignment_6_1" />
-        <module name="Assignmnet_6_3" />
-        <module name="Assignmnet_6_4" />
-        <module name="Assignment_7_1" />
+        <module name="Assignment_7_3" />
+        <module name="CurrencyConverter" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Assignment5point2" target="21" />
+      <module name="Assignment_6_1" target="21" />
       <module name="Assignment_6_2" target="21" />
+      <module name="Assignment_7_1" target="17" />
+      <module name="Assignment_7_2" target="21" />
+      <module name="Assignmnet_6_3" target="21" />
+      <module name="Assignmnet_6_4" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
