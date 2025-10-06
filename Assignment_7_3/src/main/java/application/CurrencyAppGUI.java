@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import datasource.MariaDbJpaConnection;
+import org.checkerframework.checker.units.qual.C;
 
 public class CurrencyAppGUI extends Application {
 
@@ -148,10 +149,5 @@ public class CurrencyAppGUI extends Application {
         MariaDbJpaConnection.close();
         super.stop();
     }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
 
 }
